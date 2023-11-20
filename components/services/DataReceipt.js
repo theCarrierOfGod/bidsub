@@ -3,12 +3,43 @@ import React, { useEffect, useState } from 'react'
 import { MaterialCommunityIcons } from '@expo/vector-icons';
 import Loader from '../../constants/Loader';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import query from '../../constants/query';
+import axios from 'axios';
 
-const DataReciept = ({ route, navigation }) => {
-    const { amount, number, selected, plan, add } = route.params;
+const DataReciept = ({ navigation }) => {
     const [tid, setTid] = useState('');
     const [username, setUsername] = useState('');
     const [spinning, setSpinning] = useState(true);
+    const [amount, setAmount] = useState(0);
+    const [number, setNumber] = useState('');
+    const [selected, setSelected] = useState('');
+    const [plan, setPlan] = useState('')
+
+    const fetchNow = async (tid) => {
+        try {
+            const response = await axios.get(`${query.baseUrl}transaction/${tid}`);
+            if (response.data.transaction) {
+                let transacts = response.data.transaction;
+                setAmount(transacts.amount);
+                setNumber(transacts.recepient);
+                if (transacts.token !== null) {
+                    setSelected(transacts.token.toLowerCase())
+                    console.log(transacts.token.toLowerCase())
+                }
+                setPlan(transacts.code);
+                setTimeout(() => {
+                    setSpinning(false)
+                }, 3000);
+            } else {
+                navigation.navigate('Home');
+                setTimeout(() => {
+                    setSpinning(false)
+                }, 3000);
+            }
+        } catch (error) {
+            console.log(error)
+        }
+    }
 
     const getUsername = async () => {
         try {
@@ -20,9 +51,7 @@ const DataReciept = ({ route, navigation }) => {
                             .then(value => {
                                 if (value != null) {
                                     setTid(value);
-                                    setTimeout(() => {
-                                        setSpinning(false)
-                                    }, 3000);
+                                    fetchNow(value);
                                 } else {
                                     navigation.navigate('Cable')
                                 }
@@ -38,6 +67,12 @@ const DataReciept = ({ route, navigation }) => {
         getUsername();
     }, [])
 
+    if (spinning) {
+        return (
+            <Loader spinning={spinning} />
+        )
+    } 
+
     return (
         <SafeAreaView
             style={{
@@ -46,7 +81,7 @@ const DataReciept = ({ route, navigation }) => {
                 justifyContent: 'center'
             }}
         >
-            <Loader spinning={spinning} />
+
 
             {spinning ? null : (
                 <>
@@ -63,6 +98,43 @@ const DataReciept = ({ route, navigation }) => {
                         <Text style={{ color: '#004aad', fontSize: 25, height: 40, fontFamily: 'Rubik-Bold' }}>
                             My Receipt
                         </Text>
+                        <View
+                            style={{
+                                alignItems: 'center',
+                                position: 'absolute',
+                                top: 20,
+                                zIndex: 1000,
+                                right: 20,
+
+                            }}
+                        >
+                            <Pressable
+                                onPress={() => {
+                                    navigation.replace('Home');
+                                }}
+                                style={{
+                                    width: '150%',
+                                    backgroundColor: 'white',
+                                    borderRadius: 10,
+                                    borderWidth: 2,
+                                    borderColor: '#004aad',
+                                    color: 'white',
+                                    textAlign: 'center',
+                                    justifyContent: 'center',
+                                    alignItems: 'center',
+                                    padding: 0,
+                                }}
+                            >
+                                <Text
+                                    style={{
+                                        color: '#004aad',
+                                        fontSize: 12
+                                    }}
+                                >
+                                    Done
+                                </Text>
+                            </Pressable>
+                        </View>
                         <View
                             style={[styles.shadowProp, styles.shadowBox]}
                         >
@@ -233,43 +305,9 @@ const DataReciept = ({ route, navigation }) => {
                                                 justifyContent: 'center',
                                             }}
                                         >
-                                            {plan} {add} - <MaterialCommunityIcons name="currency-ngn" size={20} color="black" />{amount}
+                                            {plan} - <MaterialCommunityIcons name="currency-ngn" size={20} color="black" />{amount}
                                         </Text>
                                     </View>
-                                </View>
-
-                                <View
-                                    style={{
-                                        alignItems: 'center'
-                                    }}
-                                >
-                                    <Pressable
-                                        onPress={() => {
-                                            navigation.replace('Home');
-                                        }}
-                                        style={{
-                                            width: '90%',
-                                            height: 50,
-                                            backgroundColor: 'white',
-                                            borderRadius: 10,
-                                            borderWidth: 2,
-                                            borderColor: '#004aad',
-                                            color: 'white',
-                                            textAlign: 'center',
-                                            justifyContent: 'center',
-                                            alignItems: 'center',
-                                            padding: 0,
-                                        }}
-                                    >
-                                        <Text
-                                            style={{
-                                                color: '#004aad',
-                                                fontSize: 25
-                                            }}
-                                        >
-                                            Done
-                                        </Text>
-                                    </Pressable>
                                 </View>
                             </View>
                         </View>

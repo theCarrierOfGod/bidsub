@@ -1,11 +1,11 @@
 {
   "expo": {
-    "name": "bidsub",
-    "slug": "bidsub",
-    "version": "1.0.0",
+    "name": "Bidsub",
+    "slug": "Bidsub",
+    "version": "1.0.1",
     "orientation": "portrait",
     "icon": "./assets/logo.png",
-    "userInterfaceStyle": "light",
+    "userInterfaceStyle": "automatic",
     "splash": {
       "image": "./assets/logo.png",
       "resizeMode": "contain",
@@ -16,17 +16,17 @@
     ],
     "ios": {
       "supportsTablet": true,
-      "bundleIdentifier": "com.olaolumide.bidsub"
+      "bundleIdentifier": "com.devolaolumide.Bidsub"
     },
     "android": {
       "adaptiveIcon": {
         "foregroundImage": "./assets/logo.png",
         "backgroundColor": "#004aad"
       },
-      "package": "com.olaolumide.bidsub",
       "permissions": [
         "android.permission.RECORD_AUDIO"
-      ]
+      ],
+      "package": "com.devolaolumide.Bidsub"
     },
     "web": {
       "favicon": "./assets/logo.png"
@@ -41,7 +41,7 @@
     ],
     "extra": {
       "eas": {
-        "projectId": "f7e7abf2-6e70-44d8-b5e0-bdf9ae94d6f6"
+        "projectId": "abf6a351-df93-435f-8f47-3547d3c118d9"
       }
     }
   }

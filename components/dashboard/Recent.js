@@ -72,7 +72,7 @@ const Recent = ({ navigation, refreshing }) => {
     } else {
         screen = <View style={styles.sectionBody}>
             {data.map((item, index) => (
-                <TransactionTable data={item} key={index} />
+                <TransactionTable  key={index} data={item} navigation={navigation}/>
             ))}
         </View>
     }
@@ -94,29 +94,6 @@ const Recent = ({ navigation, refreshing }) => {
                     <Text style={styles.rightHeadText}> Recent Transactions </Text>
                 </View>
                 {screen}
-                {/* {spinning ? (
-                    <ActivityIndicator
-                        animation='fade'
-                        size="large"
-                        color="#0882C5"
-                        style={{ margin: 35 }}
-                    />
-                ) : (
-                    data.length === 0 ? 
-                ) : (
-                <>
-                    <View style={styles.sectionBody}>
-                        {data.map((item, index) => (
-                            <TransactionTable data={item} key={index} />
-                        ))}
-                    </View>
-                </>
-                )}
-                {error.length > 0 ? (
-                    <Text style={styles.link}>
-                        {error}
-                    </Text>
-                ) : null} */}
             </View>
         </View>
     )
@@ -134,9 +111,9 @@ const styles = StyleSheet.create({
         flex: 0,
         justifyContent: 'center',
         marginVertical: 20,
-        paddingHorizontal: 7,
+        paddingHorizontal: 10,
         width: '100%',
-        color: 'black',
+        backgroundColor: 'rgba(0, 0, 0, 0.04)',
     },
     sectionHeader: {
         flexDirection: 'row',

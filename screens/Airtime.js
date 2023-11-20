@@ -9,6 +9,7 @@ import query from '../constants/query';
 import { useIsFocused } from '@react-navigation/native';
 import SuccessBox from '../components/SuccessBox';
 import { NetworkTest } from '../constants/NetworkTest';
+import * as Notifications from 'expo-notifications';
 
 const Airtime = ({ navigation }) => {
     const isFocused = useIsFocused();
@@ -42,7 +43,18 @@ const Airtime = ({ navigation }) => {
 
     useEffect(() => {
         getUsername();
-    }, [isFocused])
+    }, [isFocused]);
+
+    async function scheduleAirtimeNotificatipn(amount, network) {
+        await Notifications.scheduleNotificationAsync({
+            content: {
+                title: "Airtime Purchase",
+                body: '#' + amount + ' ' + network + ' airtime' + ' successful',
+                data: { data: 'Add here' },
+            },
+            trigger: { seconds: 2 },
+        });
+    }
 
 
     const purchaseAirtime = async () => {
@@ -99,12 +111,9 @@ const Airtime = ({ navigation }) => {
         try {
             const response = await axios.post(`${query.baseUrl}purchase/airtime`, data);
             if (response.data.success) {
+                scheduleAirtimeNotificatipn(amount, selected)
                 AsyncStorage.setItem('tid', response.data.tid);
-                navigation.navigate('AirtimeReceipt', {
-                    amount: amount,
-                    selected: selected,
-                    number: number
-                })
+                navigation.navigate('AirtimeReceipt')
             } else {
                 if (response.data.error.source === 'pin') {
                     setPinError(response.data.error.message);

@@ -70,6 +70,44 @@ const ElectricityReciept = ({ route, navigation }) => {
                         </Text>
 
                         <View
+                            style={{
+                                alignItems: 'center',
+                                position: 'absolute',
+                                top: 20,
+                                zIndex: 1000,
+                                right: 20,
+
+                            }}
+                        >
+                            <Pressable
+                                onPress={() => {
+                                    navigation.replace('Home');
+                                }}
+                                style={{
+                                    width: '150%',
+                                    backgroundColor: 'white',
+                                    borderRadius: 10,
+                                    borderWidth: 2,
+                                    borderColor: '#004aad',
+                                    color: 'white',
+                                    textAlign: 'center',
+                                    justifyContent: 'center',
+                                    alignItems: 'center',
+                                    padding: 0,
+                                }}
+                            >
+                                <Text
+                                    style={{
+                                        color: '#004aad',
+                                        fontSize: 12
+                                    }}
+                                >
+                                    Done
+                                </Text>
+                            </Pressable>
+                        </View>
+
+                        <View
                             style={[styles.shadowProp, styles.shadowBox]}
                         >
                             <Text style={{ color: '#004aad', fontSize: 25, height: 40, fontFamily: 'Rubik-Bold' }}>
@@ -182,40 +220,6 @@ const ElectricityReciept = ({ route, navigation }) => {
                                             (<MaterialCommunityIcons name="currency-ngn" size={20} color="black" />{amount})
                                         </Text>
                                     </View>
-                                </View>
-
-                                <View
-                                    style={{
-                                        alignItems: 'center'
-                                    }}
-                                >
-                                    <Pressable
-                                        onPress={() => {
-                                            navigation.replace('Home');
-                                        }}
-                                        style={{
-                                            width: '90%',
-                                            height: 50,
-                                            backgroundColor: 'white',
-                                            borderRadius: 10,
-                                            borderWidth: 2,
-                                            borderColor: '#004aad',
-                                            color: 'white',
-                                            textAlign: 'center',
-                                            justifyContent: 'center',
-                                            alignItems: 'center',
-                                            padding: 0,
-                                        }}
-                                    >
-                                        <Text
-                                            style={{
-                                                color: '#004aad',
-                                                fontSize: 25
-                                            }}
-                                        >
-                                            Done
-                                        </Text>
-                                    </Pressable>
                                 </View>
                             </View>
                         </View>

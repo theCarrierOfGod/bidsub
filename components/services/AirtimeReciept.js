@@ -3,12 +3,38 @@ import React, { useEffect, useState } from 'react'
 import { MaterialCommunityIcons } from '@expo/vector-icons';
 import Loader from '../../constants/Loader';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import axios from 'axios';
+import query from '../../constants/query';
 
-const AirtimeReciept = ({ route, navigation }) => {
-    const { amount, number, selected } = route.params;
+const AirtimeReciept = ({ navigation }) => {
     const [tid, setTid] = useState('');
     const [username, setUsername] = useState('');
     const [spinning, setSpinning] = useState(true);
+    const [amount, setAmount] = useState(0);
+    const [number, setNumber] = useState('');
+    const [selected, setSelected] = useState('')
+
+    const fetchNow = async (tid) => {
+        try {
+            const response = await axios.get(`${query.baseUrl}transaction/${tid}`);
+            if (response.data.transaction) {
+                let transacts = response.data.transaction;
+                setAmount(transacts.amount);
+                setNumber(transacts.recepient);
+                if (transacts.token !== null) {
+                    setSelected(transacts.token.toLowerCase())
+                }
+            } else {
+                navigation.navigate('Home')
+            }
+        } catch (error) {
+            console.log(error)
+        } finally {
+            setTimeout(() => {
+                setSpinning(false)
+            }, 3000);
+        }
+    }
 
     const getUsername = async () => {
         try {
@@ -20,9 +46,7 @@ const AirtimeReciept = ({ route, navigation }) => {
                             .then(value => {
                                 if (value != null) {
                                     setTid(value);
-                                    setTimeout(() => {
-                                        setSpinning(false)
-                                    }, 3000);
+                                    fetchNow(value);
                                 } else {
                                     navigation.navigate('Airtime')
                                 }
@@ -30,29 +54,9 @@ const AirtimeReciept = ({ route, navigation }) => {
                     }
                 })
         } catch (error) {
-            console.error();
+            console.log(error);
         }
     }
-
-    const onShare = async () => {
-        try {
-            const result = await Share.share({
-                message:
-                    'React Native | A framework for building native apps using React',
-            });
-            if (result.action === Share.sharedAction) {
-                if (result.activityType) {
-                    // shared with activity type of result.activityType
-                } else {
-                    // shared
-                }
-            } else if (result.action === Share.dismissedAction) {
-                // dismissed
-            }
-        } catch (error) {
-            Alert.alert(error.message);
-        }
-    };
 
     useEffect(() => {
         getUsername();
@@ -73,7 +77,7 @@ const AirtimeReciept = ({ route, navigation }) => {
                     <View
                         style={{
                             flex: 0,
-                            height: '80%',
+                            height: '70%',
                             width: '95%',
                             marginTop: 70,
                             alignItems: 'center',
@@ -83,6 +87,43 @@ const AirtimeReciept = ({ route, navigation }) => {
                         <Text style={{ color: '#004aad', fontSize: 25, height: 40, fontFamily: 'Rubik-Bold' }}>
                             My Receipt
                         </Text>
+                        <View
+                            style={{
+                                alignItems: 'center',
+                                position: 'absolute',
+                                top: 20,
+                                zIndex: 1000,
+                                right: 20,
+
+                            }}
+                        >
+                            <Pressable
+                                onPress={() => {
+                                    navigation.replace('Home');
+                                }}
+                                style={{
+                                    width: '150%',
+                                    backgroundColor: 'white',
+                                    borderRadius: 10,
+                                    borderWidth: 2,
+                                    borderColor: '#004aad',
+                                    color: 'white',
+                                    textAlign: 'center',
+                                    justifyContent: 'center',
+                                    alignItems: 'center',
+                                    padding: 0,
+                                }}
+                            >
+                                <Text
+                                    style={{
+                                        color: '#004aad',
+                                        fontSize: 12
+                                    }}
+                                >
+                                    Done
+                                </Text>
+                            </Pressable>
+                        </View>
                         <View
                             style={[styles.shadowProp, styles.shadowBox]}
                         >
@@ -131,7 +172,8 @@ const AirtimeReciept = ({ route, navigation }) => {
                                 style={{
                                     justifyContent: 'space-evenly',
                                     width: '100%',
-                                    height: '70%',
+                                    height: '75%',
+                                    paddingBottom: 30,
                                 }}
                             >
 
@@ -140,7 +182,7 @@ const AirtimeReciept = ({ route, navigation }) => {
                                         flexDirection: 'row',
                                         alignItems: 'center',
                                         justifyContent: 'flex-start',
-                                        width: '100%'
+                                        width: '100%',
                                     }}
                                 >
                                     <View
@@ -257,47 +299,6 @@ const AirtimeReciept = ({ route, navigation }) => {
                                         </Text>
                                     </View>
                                 </View>
-
-                                <View
-                                    style={{
-                                        alignItems: 'center'
-                                    }}
-                                >
-                                    <Pressable
-                                        onPress={() => {
-                                            navigation.replace('Home');
-                                        }}
-                                        style={{
-                                            width: '90%',
-                                            height: 50,
-                                            backgroundColor: 'white',
-                                            borderRadius: 10,
-                                            borderWidth: 2,
-                                            borderColor: '#004aad',
-                                            color: 'white',
-                                            textAlign: 'center',
-                                            justifyContent: 'center',
-                                            alignItems: 'center',
-                                            padding: 0,
-                                        }}
-                                    >
-                                        <Text
-                                            style={{
-                                                color: '#004aad',
-                                                fontSize: 25
-                                            }}
-                                        >
-                                            Done
-                                        </Text>
-                                    </Pressable>
-                                </View>
-                                <Pressable
-                                    onPress={() => {
-                                        onShare();
-                                    }}
-                                >
-                                    <Text>Share</Text>
-                                </Pressable>
                             </View>
                         </View>
                     </View>

@@ -1,6 +1,7 @@
 import { Pressable, ScrollView, StyleSheet, Text, View } from 'react-native'
 import React from 'react'
 import { MaterialCommunityIcons } from '@expo/vector-icons'
+import AsyncStorage from '@react-native-async-storage/async-storage'
 
 const Services = ({ navigation }) => {
     return (
@@ -29,7 +30,10 @@ const Services = ({ navigation }) => {
             >
                 <Pressable
                     style={styles.eachService}
-                    onPress={() => navigation.navigate('Airtime')}
+                    onPress={() => {
+                        AsyncStorage.setItem('tid', 'BSAT39482413664');
+                        navigation.navigate('AirtimeReceipt')
+                    }}
                 >
                     <MaterialCommunityIcons style={styles.icon} name="phone" color={'#004AAD'} size={40} />
                     <Text style={styles.eachText}>

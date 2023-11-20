@@ -10,6 +10,7 @@ import Dropdown from '../components/services/Dropdown';
 import { useIsFocused } from '@react-navigation/native';
 import SuccessBox from '../components/SuccessBox';
 import { NetworkTest } from '../constants/NetworkTest';
+import * as Notifications from 'expo-notifications';
 
 const Data = ({ navigation }) => {
     const isFocused = useIsFocused();
@@ -70,7 +71,18 @@ const Data = ({ navigation }) => {
 
     useEffect(() => {
         getUsername();
-    }, [isFocused])
+    }, [isFocused]);
+
+    async function scheduleDataNotificatipn(dataPlan, number) {
+        await Notifications.scheduleNotificationAsync({
+            content: {
+                title: "Data Purchase",
+                body: dataPlan + " on " + number + " successful",
+                data: { data: 'Add here' },
+            },
+            trigger: { seconds: 2 },
+        });
+    }
 
 
     const purchaseData = async () => {
@@ -127,14 +139,9 @@ const Data = ({ navigation }) => {
         try {
             const response = await axios.post(`${query.baseUrl}purchase/data`, data);
             if (response.data.success) {
+                scheduleDataNotificatipn(dataPlan, number)
                 AsyncStorage.setItem('tid', response.data.tid);
-                navigation.navigate('DataReceipt', {
-                    amount: amount,
-                    selected: selected,
-                    number: number,
-                    plan: planName,
-                    add: addition,
-                })
+                navigation.navigate('DataReceipt')
             } else {
                 console.log(response.data.error);
                 if (response.data.error.source === 'pin') {

@@ -64,6 +64,43 @@ const CableReciept = ({ route, navigation }) => {
                             My Receipt
                         </Text>
                         <View
+                            style={{
+                                alignItems: 'center',
+                                position: 'absolute',
+                                top: 20,
+                                zIndex: 1000,
+                                right: 20,
+
+                            }}
+                        >
+                            <Pressable
+                                onPress={() => {
+                                    navigation.replace('Home');
+                                }}
+                                style={{
+                                    width: '150%',
+                                    backgroundColor: 'white',
+                                    borderRadius: 10,
+                                    borderWidth: 2,
+                                    borderColor: '#004aad',
+                                    color: 'white',
+                                    textAlign: 'center',
+                                    justifyContent: 'center',
+                                    alignItems: 'center',
+                                    padding: 0,
+                                }}
+                            >
+                                <Text
+                                    style={{
+                                        color: '#004aad',
+                                        fontSize: 12
+                                    }}
+                                >
+                                    Done
+                                </Text>
+                            </Pressable>
+                        </View>
+                        <View
                             style={[styles.shadowProp, styles.shadowBox]}
                         >
                             <View>
@@ -225,39 +262,6 @@ const CableReciept = ({ route, navigation }) => {
                                     </View>
                                 </View>
 
-                                <View
-                                    style={{
-                                        alignItems: 'center'
-                                    }}
-                                >
-                                    <Pressable
-                                        onPress={() => {
-                                            navigation.replace('Home');
-                                        }}
-                                        style={{
-                                            width: '90%',
-                                            height: 50,
-                                            backgroundColor: 'white',
-                                            borderRadius: 10,
-                                            borderWidth: 2,
-                                            borderColor: '#004aad',
-                                            color: 'white',
-                                            textAlign: 'center',
-                                            justifyContent: 'center',
-                                            alignItems: 'center',
-                                            padding: 0,
-                                        }}
-                                    >
-                                        <Text
-                                            style={{
-                                                color: '#004aad',
-                                                fontSize: 25
-                                            }}
-                                        >
-                                            Done
-                                        </Text>
-                                    </Pressable>
-                                </View>
                             </View>
                         </View>
                     </View>

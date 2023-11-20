@@ -9,6 +9,7 @@ import Loader from '../constants/Loader';
 import { MaterialCommunityIcons, MaterialIcons } from '@expo/vector-icons';
 import SubmitButton from '../constants/SubmitButton';
 import SuccessBox from '../components/SuccessBox';
+import * as Notifications from 'expo-notifications';
 
 const FundWallet = ({ navigation }) => {
     const paystackWebViewRef = useRef(paystackProps.PayStackRef);
@@ -82,6 +83,18 @@ const FundWallet = ({ navigation }) => {
             isOnline();
         }
     }, [isFocused]);
+    
+
+    async function scheduleNotification(amount) {
+        await Notifications.scheduleNotificationAsync({
+            content: {
+                title: "Wallet Funding",
+                body: "Your account has been funded with #" + amount,
+                data: { data: 'Add here' },
+            },
+            trigger: { seconds: 2 },
+        });
+    }
 
     const onSuccess = (reference) => {
         purchaseAirtime(reference);
@@ -109,7 +122,7 @@ const FundWallet = ({ navigation }) => {
                 console.log("Success");
                 setMessage('Wallet Funded');
                 setSuccess(true);
-
+                scheduleNotification(amount)
                 setTimeout(() => {
                     setSuccess(false);
                     navigation.goBack();

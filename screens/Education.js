@@ -108,13 +108,7 @@ const Education = ({ navigation }) => {
             const response = await axios.post(`${query.baseUrl}purchase/edu`, data);
             if (response.data.success) {
                 AsyncStorage.setItem('tid', response.data.tid);
-                navigation.navigate('EduReceipt', {
-                    amount: amount,
-                    selected: selected,
-                    plan: resultName,
-                    type: resultType,
-                    result: response.data.token
-                })
+                navigation.navigate('EduReceipt');
             } else {
                 if (response.data.error.source === 'pin') {
                     setPinError(response.data.error.message);
